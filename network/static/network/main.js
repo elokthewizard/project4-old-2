@@ -1,3 +1,5 @@
+var VisibleComponentContext = React.createContext();
+
 function App() {
     const [visibleComponent, setVisibleComponent] = React.useState(null);
 
@@ -15,7 +17,7 @@ function App() {
             )}
             
 
-            {visibleComponent === 'newPostForm' && <NewPostForm />}
+            {visibleComponent === 'newPostForm' && <NewPostForm setVisibleComponent={setVisibleComponent} />}
             {visibleComponent === 'two' && <ComponentTwo />}
         </div>
 
@@ -23,7 +25,7 @@ function App() {
 }
 
 // get posts from users following list
-function NewPostForm() {
+function NewPostForm({ setVisibleComponent }) {
     const [formData, setFormData] = React.useState({ body: ''});
     const csrftoken = Cookies.get('csrftoken');
 
@@ -58,6 +60,7 @@ function NewPostForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         postData(formData);
+        setVisibleComponent(null);
     }
 
     return (
