@@ -16,7 +16,7 @@ class Post(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     liked_by = models.ManyToManyField(User, related_name="liked_by", blank=True)
 
-class newPostForm(ModelForm):
+class PostForm(ModelForm):
 
     class Meta:
         model = Post
