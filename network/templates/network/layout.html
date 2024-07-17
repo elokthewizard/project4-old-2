@@ -6,14 +6,17 @@
         <title>{% block title %}Social Network{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'network/styles.css' %}" rel="stylesheet">
+        <!-- js cookie library -->
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>      
         <!-- React -->
         <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
         <!-- React Dom -->
         <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
         <!-- Babel -->
         <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.js"></script>
-
+        
         <script type="text/babel" src="{% static 'network/Hooks.js' %}"></script>
+        <script type="text/babel" src="{% static 'network/main.js' %}"></script>
     </head>
     <body>
 

@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+import json
 
-from .models import User
+from .models import *
 
 
 def index(request):
@@ -61,3 +62,25 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+def submit_post(request):
+
+    if request.method == "POST":
+        # decode byte string manually
+        body_unicode = request.body.decode('utf-8')
+        request_data = json.loads(body_unicode)
+        post_body = request_data.get('body')
+        
+        post_info = {
+            'author': request.user,
+            'author_username': request.user.username,
+            'body': post_body
+        }
+
+        form = PostForm(post_info)
+
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'message': 'Success!'}, status=200)
+        else:
+            return JsonResponse({'errors': form.errors}, status=400)
