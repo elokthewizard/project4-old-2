@@ -11,7 +11,7 @@ function useFetch(url) {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error("Bad response")
+                throw new Error(`Bad response: ${response.status}`)
             }
             return response.json()
         })

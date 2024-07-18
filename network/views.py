@@ -88,8 +88,14 @@ def submit_post(request):
         
 def home(request):
     try:
-        posts = Post.objects.values().order_by("-time")
-        return JsonResponse(list(posts), safe=False)
+        posts = Post.objects.all().order_by("-time")
+        posts_list = []
+        for post in posts:
+            post_dict = model_to_dict(post)
+            post_dict['liked_by'] = [user.username for user in post.liked_by.all()] # these would not work with model to dict idk why
+            post_dict['time'] = post.time # these would not work with model to dict idk why
+            posts_list.append(post_dict)
+        return JsonResponse(posts_list, safe=False)
     except Post.DoesNotExist:
         return JsonResponse({'error': 'Posts not found'}, status=404)
     
@@ -101,17 +107,23 @@ def get_user_data(username):
     posts = Post.objects.filter(author=user)
     # make user and post instance serializable as dicts
     user_dict = model_to_dict(user)
-    posts_dict = [model_to_dict(post) for post in posts]
+    user_dict['followers'] = [follower.username for follower in user.followers.all()]
+    user_dict['following'] = [following.username for following in user.following.all()]
+    posts_dict = [model_to_dict(post, fields=[field.name for field in post._meta.fields]) for post in posts]
+    for post_dict, post in zip(posts_dict, posts):
+        post_dict['liked_by'] = [user.username for user in post.liked_by.all()]
+        post_dict['time'] = post.time
     return user, user_dict, posts_dict
 
 def view_profile(request, username):
     user, user_dict, posts_dict = get_user_data(username)
     if user is None:
         data = {'error': 'User not found'}
-    data = {
-        'username': user_dict['username'],
-        'followers': user.followers.count(),
-        'following': user.following.count(),
-        'posts': posts_dict
-    }
+    else:
+        data = {
+            'username': user_dict['username'],
+            'followers': user_dict['followers'],
+            'following': user_dict['following'],
+            'posts': posts_dict
+        }
     return JsonResponse(data)

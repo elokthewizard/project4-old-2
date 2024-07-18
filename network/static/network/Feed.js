@@ -24,6 +24,7 @@ function Feed({visibleComponent, setVisibleComponent, currentProfile, setCurrent
                 }}>@{post.author_username}</a>
                 <div>{post.body}</div>
                 <div>{post.time}</div>
+                <div>Likes: {post.liked_by.length}</div>
             </div>
             ))}
         </div>
