@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 import json
 
@@ -84,3 +85,33 @@ def submit_post(request):
             return JsonResponse({'message': 'Success!'}, status=200)
         else:
             return JsonResponse({'errors': form.errors}, status=400)
+        
+def home(request):
+    try:
+        posts = Post.objects.values().order_by("-time")
+        return JsonResponse(list(posts), safe=False)
+    except Post.DoesNotExist:
+        return JsonResponse({'error': 'Posts not found'}, status=404)
+    
+def get_user_data(username):
+    try:
+        user = get_object_or_404(User, username=username)
+    except User.DoesNotExist:
+        return None, None, None
+    posts = Post.objects.filter(author=user)
+    # make user and post instance serializable as dicts
+    user_dict = model_to_dict(user)
+    posts_dict = [model_to_dict(post) for post in posts]
+    return user, user_dict, posts_dict
+
+def view_profile(request, username):
+    user, user_dict, posts_dict = get_user_data(username)
+    if user is None:
+        data = {'error': 'User not found'}
+    data = {
+        'username': user_dict['username'],
+        'followers': user.followers.count(),
+        'following': user.following.count(),
+        'posts': posts_dict
+    }
+    return JsonResponse(data)

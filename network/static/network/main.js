@@ -2,90 +2,70 @@ var VisibleComponentContext = React.createContext();
 
 function App() {
     const [visibleComponent, setVisibleComponent] = React.useState(null);
+    const [currentProfile, setCurrentProfile] = React.useState(null)
 
     return(
         <div>
             {visibleComponent === null && (
                 <>
-                    <button onClick={() => {
-                        setVisibleComponent('newPostForm')
-                    }}>New post</button>
-                    <button onClick={() => {
-                        setVisibleComponent('two')
-                    }}>Show Component Two</button>
+                    <NewPostForm setVisibleComponent={setVisibleComponent} />
+                    <Feed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile}/>
                 </>
             )}
-            
-
-            {visibleComponent === 'newPostForm' && <NewPostForm setVisibleComponent={setVisibleComponent} />}
-            {visibleComponent === 'two' && <ComponentTwo />}
+            {visibleComponent === 'profile' && (
+                <>
+                    <Profile currentProfile={currentProfile} />
+                </>
+            )}
         </div>
 
     )
 }
 
-// get posts from users following list
-function NewPostForm({ setVisibleComponent }) {
-    const [formData, setFormData] = React.useState({ body: ''});
-    const csrftoken = Cookies.get('csrftoken');
+function Profile({ currentProfile }) {
+    const [data, setData] = React.useState(null);
+    const [loading, setLoading] = React.useState(true);
 
-    function postData(body) {
-
-        fetch('submit-post', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify(body)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Bad response")
-            }
-            return response.json()
-        })
-        .catch(error => {
-            console.error("Error: ", error)
-        })
-    }
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        })
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        postData(formData);
-        setVisibleComponent(null);
-    }
-
-    return (
-        <form onSubmit={handleSubmit}>
-            <textarea name="body" placeholder="Whats happening?" onChange={handleChange}></textarea>
-            <button type="submit" disabled={!formData.body}>Submit</button>
-        </form>
-    )
-}
-
-function ComponentTwo() {
-    const {data, loading, error} = useFetch();
+    React.useEffect(() => {
+        fetch(`view-profile/${currentProfile}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`)
+                }
+                return response.json()
+            })
+            .then(data => {
+                setData(data)
+                setLoading(false);
+                console.log(data)
+            })
+            .catch(error => console.error('Error:', error));
+    }, [currentProfile]);
 
     if (loading) {
-        return <div>Loading...</div>
-    }
-    if (error) {
-        return <div>Error: {error.message}</div>
+        return <div>Loading...</div>;
     }
 
     return (
-        <div>
-            <h1>Second Component!</h1>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
-        </div>
+        <>
+            <h2>{data.username}</h2>
+            <p>Followers: {data.followers}</p>
+            <p>Following: {data.following}</p>
+            <h3>Posts:</h3>
+            {data.posts.map(post => (
+                <div className="post" id={`post_${post.id}`} key={post.id}>
+                <a className="profile-link" href={`view-profile/${post.author_username}`} onClick={(e) => {
+                    e.preventDefault();
+                    console.log("SWAG")
+                    console.log(`${post.author_username}`)
+                    setVisibleComponent('profile')
+                    setCurrentProfile(`${post.author_username}`)
+                }}>@{post.author_username}</a>
+                <div>{post.body}</div>
+                <div>{post.time}</div>
+            </div>
+            ))}
+        </>
     )
 }
 
