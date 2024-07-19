@@ -1,5 +1,5 @@
-function Feed({visibleComponent, setVisibleComponent, currentProfile, setCurrentProfile}) {
-    const {data, loading, error} = useFetch('home');
+function FollowingFeed({visibleComponent, setVisibleComponent, currentProfile, setCurrentProfile}) {
+    const {data, loading, error} = useFetch('following-feed');
 
     console.log(visibleComponent)
     console.log(currentProfile)

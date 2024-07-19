@@ -9,7 +9,8 @@ function App() {
             {visibleComponent === null && (
                 <>
                     <NewPostForm setVisibleComponent={setVisibleComponent} />
-                    <Feed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile}/>
+                    {/* <Feed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile}/> */}
+                    <FollowingFeed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile} />
                 </>
             )}
             {visibleComponent === 'profile' && (

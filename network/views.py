@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -89,6 +90,23 @@ def submit_post(request):
 def home(request):
     try:
         posts = Post.objects.all().order_by("-time")
+        posts_list = []
+        for post in posts:
+            post_dict = model_to_dict(post)
+            post_dict['liked_by'] = [user.username for user in post.liked_by.all()] # these would not work with model to dict idk why
+            post_dict['time'] = post.time # these would not work with model to dict idk why
+            posts_list.append(post_dict)
+        return JsonResponse(posts_list, safe=False)
+    except Post.DoesNotExist:
+        return JsonResponse({'error': 'Posts not found'}, status=404)
+    
+@login_required
+def following_feed(request):
+    try:
+        user = request.user
+        following_users = user.following.all()
+
+        posts = Post.objects.filter(author__in=following_users).order_by("-time")
         posts_list = []
         for post in posts:
             post_dict = model_to_dict(post)
