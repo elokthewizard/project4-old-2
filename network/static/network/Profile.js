@@ -1,22 +1,5 @@
-function Profile({ currentProfile, setCurrentProfile }) {
-    const [data, setData] = React.useState(null);
-    const [loading, setLoading] = React.useState(true);
-
-    React.useEffect(() => {
-        fetch(`view-profile/${currentProfile}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`)
-                }
-                return response.json()
-            })
-            .then(data => {
-                setData(data)
-                setLoading(false);
-                console.log(data)
-            })
-            .catch(error => console.error('Error:', error));
-    }, [currentProfile]);
+function Profile({ currentProfile, setCurrentProfile, setVisibleComponent }) {
+    const {data, loading} = useProfileData(currentProfile)
 
     if (loading) {
         return <div>Loading...</div>;
@@ -25,8 +8,16 @@ function Profile({ currentProfile, setCurrentProfile }) {
     return (
         <>
             <h2>{data.username}</h2>
-            <p>Followers: {data.followers.length}</p>
-            <p>Following: {data.following.length}</p>
+            <a href="/" onClick={(e) => {
+                        e.preventDefault();
+                        setVisibleComponent('followers')
+                        
+                    }}>Followers: {data.followers.length}</a>
+            <a href="/" onClick={(e) => {
+                        e.preventDefault();
+                        setVisibleComponent('following')
+                        
+                    }}>Following: {data.following.length}</a>
             <h3>Posts:</h3>
             {data.posts.map(post => (
                 <div className="post" id={`post_${post.id}`} key={post.id}>
