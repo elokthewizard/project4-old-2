@@ -13,6 +13,7 @@ function Feed({visibleComponent, setVisibleComponent, currentProfile, setCurrent
 
     return (
         <div className='feed'>
+            <h2>All posts:</h2>
             {data.map(post => (
                 <div className="post" id={`post_${post.id}`} key={post.id}>
                 <a className="profile-link" href={`view-profile/${post.author_username}`} onClick={(e) => {

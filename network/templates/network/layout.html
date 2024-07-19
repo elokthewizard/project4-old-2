@@ -20,6 +20,9 @@
         <script type="text/babel" src="{% static 'network/Feed.js' %}"></script>
         <script type="text/babel" src="{% static 'network/Profile.js' %}"></script>
         <script type="text/babel" src="{% static 'network/FollowingFeed.js' %}"></script>
+        <script type="text/babel" src="{% static 'network/Followers.js' %}"></script>
+        <script type="text/babel" src="{% static 'network/Following.js' %}"></script>
+        <script type="text/babel" src="{% static 'network/Navbar.js' %}"></script>
         <script type="text/babel" src="{% static 'network/main.js' %}"></script>
     </head>
     <body>
@@ -34,13 +37,13 @@
                         <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
                     </li>
                 {% endif %}
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <a class="nav-link" href="{% url 'index' %}">All Posts</a>
-                </li>
+                </li> -->
                 {% if user.is_authenticated %}
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#">Following</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                     </li>
@@ -54,8 +57,8 @@
                 {% endif %}
               </ul>
             </div>
-          </nav>
-        
+        </nav>
+
         <div class="body">
             {% block body %}
             {% endblock %}

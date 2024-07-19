@@ -65,6 +65,12 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
+def current_user(request):
+    user = request.user
+    return JsonResponse({
+        'username': user.username
+    })
+
 def submit_post(request):
 
     if request.method == "POST":
