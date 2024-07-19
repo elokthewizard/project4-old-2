@@ -3,6 +3,11 @@ var VisibleComponentContext = React.createContext();
 function App() {
     const [visibleComponent, setVisibleComponent] = React.useState(null);
     const [currentProfile, setCurrentProfile] = React.useState(null)
+    const [postData, setPostData] = React.useState(null);
+
+    React.useEffect(() => {
+        console.log(postData);
+    }, [postData]);
 
     return(
         <div>
@@ -17,7 +22,7 @@ function App() {
                 <>
                     <Navbar setVisibleComponent={setVisibleComponent} />
                     <NewPostForm setVisibleComponent={setVisibleComponent} />
-                    <Feed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile}/>
+                    <Feed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile} postData={postData} setPostData={setPostData} />
                 </>
             )}
             {visibleComponent === 'profile' && (
@@ -33,6 +38,11 @@ function App() {
             {visibleComponent === 'following' && (
                 <>
                     <Following setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} />
+                </>
+            )}
+            {visibleComponent === 'edit_post' && (
+                <>
+                    <EditPostForm postData={postData} setVisibleComponent={setVisibleComponent}/>
                 </>
             )}
         </div>

@@ -93,6 +93,32 @@ def submit_post(request):
         else:
             return JsonResponse({'errors': form.errors}, status=400)
         
+def update_post(request, post_id):
+    if request.method == "PUT":
+
+        post = get_object_or_404(Post, id=post_id)
+
+        if request.user != post.author:
+            return JsonResponse({'error': 'Did you make this post? Wuit touching stuff that aint yours!'})
+
+        body_unicode = request.body.decode('utf-8')
+        request_data = json.loads(body_unicode)
+        post_body = request_data.get('body')
+
+        post_info = {
+            'author': request.user,
+            'author_username': request.user.username,
+            'body': post_body
+        }
+
+        form = PostForm(post_info, instance=post)
+
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'message': 'Success!'}, status=200)
+        else:
+            return JsonResponse({'errors': form.errors}, status=400)
+        
 def home(request):
     try:
         posts = Post.objects.all().order_by("-time")

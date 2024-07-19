@@ -9,18 +9,18 @@ function Navbar({setVisibleComponent}) {
     }, []);
 
     return (
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div>
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onClick={(e) => {
+                <ul className="navbar-nav mr-auto">
+                    <li className="nav-item">
+                        <a className="nav-link" href="#" onClick={(e) => {
                             e.preventDefault();
                             setVisibleComponent('all_posts')
                         }}>All Posts</a>
                     </li>
                     {username && ( 
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" onClick={(e) => {
+                        <li className="nav-item">
+                            <a className="nav-link" href="#" onClick={(e) => {
                                 e.preventDefault();
                                 setVisibleComponent(null)
                             }}>Following</a>

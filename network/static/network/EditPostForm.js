@@ -1,10 +1,11 @@
-function NewPostForm({ setVisibleComponent }) {
-    const [formData, setFormData] = React.useState({ body: ''});
+function EditPostForm({ postData, setVisibleComponent }) {
+    console.log(`AYO ${postData.id}`)
+    const [formData, setFormData] = React.useState({body: postData.body});
     const csrftoken = Cookies.get('csrftoken');
 
-    function postData(body) {
-        fetch('submit-post', {
-            method: 'POST',
+    function updateData(body) {
+        fetch(`update-post/${postData.id}/`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrftoken
@@ -13,7 +14,7 @@ function NewPostForm({ setVisibleComponent }) {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error("Bad response")
+                throw new Error(`Bad response: ${response.status}`)
             }
             return response.json()
         })
@@ -31,14 +32,14 @@ function NewPostForm({ setVisibleComponent }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        postData(formData);
+        updateData(formData);
         setVisibleComponent(null);
     }
 
     return (
         <form onSubmit={handleSubmit}>
-            <textarea name="body" placeholder="Whats happening?" onChange={handleChange}></textarea>
-            <button type="submit" disabled={!formData.body}>Submit</button>
+            <textarea name="body" value={formData.body} onChange={handleChange}></textarea>
+            <button type="submit" disabled={!formData.body}>Update</button>
         </form>
     )
 }

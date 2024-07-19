@@ -1,8 +1,30 @@
-function Feed({visibleComponent, setVisibleComponent, currentProfile, setCurrentProfile}) {
+function Feed({visibleComponent, setVisibleComponent, currentProfile, setCurrentProfile, postData, setPostData}) {
     const {data, loading, error} = useFetch('home');
+    const [currentUser, setCurrentUser] = React.useState(null);
+
+    React.useEffect(() => {
+        fetch('current_user')
+        .then(response => response.json())
+        .then(data => {
+            setCurrentUser(data.username)
+            console.log(data.username)
+        })
+    }, [])
+
+    React.useEffect(() => {
+        console.log(postData);
+    }, [postData]);
 
     console.log(visibleComponent)
     console.log(currentProfile)
+
+    function handleEdit(postId) {
+        let post = data.find(post => post.id === postId)
+        setPostData(post);
+        setVisibleComponent('edit_post')
+        console.log(post)
+        console.log(postData)
+    }
 
     if (loading) {
         return <div>Loading...</div>
@@ -26,6 +48,10 @@ function Feed({visibleComponent, setVisibleComponent, currentProfile, setCurrent
                 <div>{post.body}</div>
                 <div>{post.time}</div>
                 <div>Likes: {post.liked_by.length}</div>
+
+                {currentUser === post.author_username && (
+                    <button onClick={() => handleEdit(post.id)}>Edit</button>
+                )}
             </div>
             ))}
         </div>
