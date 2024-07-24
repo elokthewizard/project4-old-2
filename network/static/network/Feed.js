@@ -1,5 +1,6 @@
-function Feed({visibleComponent, setVisibleComponent, currentProfile, setCurrentProfile, postData, setPostData}) {
-    const {data, loading, error} = useFetch('home');
+function Feed({ setVisibleComponent, setCurrentProfile, setPostData}) {
+    const [currentPage, setCurrentPage] = React.useState(1)
+    const {data, loading, error} = useFetch(`home?page=${currentPage}`);
     const [currentUser, setCurrentUser] = React.useState(null);
 
     React.useEffect(() => {
@@ -11,19 +12,10 @@ function Feed({visibleComponent, setVisibleComponent, currentProfile, setCurrent
         })
     }, [])
 
-    React.useEffect(() => {
-        console.log(postData);
-    }, [postData]);
-
-    console.log(visibleComponent)
-    console.log(currentProfile)
-
     function handleEdit(postId) {
         let post = data.find(post => post.id === postId)
         setPostData(post);
         setVisibleComponent('edit_post')
-        console.log(post)
-        console.log(postData)
     }
 
     if (loading) {
@@ -40,8 +32,6 @@ function Feed({visibleComponent, setVisibleComponent, currentProfile, setCurrent
                 <div className="post" id={`post_${post.id}`} key={post.id}>
                 <a className="profile-link" href={`view-profile/${post.author_username}`} onClick={(e) => {
                     e.preventDefault();
-                    console.log("SWAG")
-                    console.log(`${post.author_username}`)
                     setVisibleComponent('profile')
                     setCurrentProfile(`${post.author_username}`)
                 }}>@{post.author_username}</a>
@@ -54,6 +44,9 @@ function Feed({visibleComponent, setVisibleComponent, currentProfile, setCurrent
                 )}
             </div>
             ))}
+            <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>Back</button>
+            <button onClick={() => setCurrentPage(currentPage + 1)} disabled={data.length < 10}>Next</button>
+            
         </div>
     )
 }

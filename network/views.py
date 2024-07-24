@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -122,8 +123,12 @@ def update_post(request, post_id):
 def home(request):
     try:
         posts = Post.objects.all().order_by("-time")
+        paginator = Paginator(posts, 10)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
         posts_list = []
-        for post in posts:
+        for post in page_obj:
             post_dict = model_to_dict(post)
             post_dict['liked_by'] = [user.username for user in post.liked_by.all()] # these would not work with model to dict idk why
             post_dict['time'] = post.time # these would not work with model to dict idk why

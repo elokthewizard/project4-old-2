@@ -1,8 +1,5 @@
-function FollowingFeed({visibleComponent, setVisibleComponent, currentProfile, setCurrentProfile}) {
+function FollowingFeed({setVisibleComponent, setCurrentProfile}) {
     const {data, loading, error} = useFetch('following-feed');
-
-    console.log(visibleComponent)
-    console.log(currentProfile)
 
     if (loading) {
         return <div>Loading...</div>

@@ -4,6 +4,7 @@ function App() {
     const [visibleComponent, setVisibleComponent] = React.useState(null);
     const [currentProfile, setCurrentProfile] = React.useState(null)
     const [postData, setPostData] = React.useState(null);
+    const [componentKey, setComponentKey] = React.useState(0);
 
     React.useEffect(() => {
         console.log(postData);
@@ -14,15 +15,15 @@ function App() {
             {visibleComponent === null && (
                 <>
                     <Navbar setVisibleComponent={setVisibleComponent} />
-                    <NewPostForm setVisibleComponent={setVisibleComponent} />
-                    <FollowingFeed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile} />
+                    <NewPostForm setVisibleComponent={setVisibleComponent} setComponentKey={setComponentKey} />
+                    <FollowingFeed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} setCurrentProfile={setCurrentProfile} key={componentKey} />
                 </>
             )}
             {visibleComponent === 'all_posts' && (
                 <>
                     <Navbar setVisibleComponent={setVisibleComponent} />
-                    <NewPostForm setVisibleComponent={setVisibleComponent} />
-                    <Feed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile} postData={postData} setPostData={setPostData} />
+                    <NewPostForm setVisibleComponent={setVisibleComponent} setComponentKey={setComponentKey} />
+                    <Feed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} setCurrentProfile={setCurrentProfile} setPostData={setPostData} key={componentKey} />
                 </>
             )}
             {visibleComponent === 'profile' && (
