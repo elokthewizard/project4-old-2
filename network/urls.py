@@ -12,6 +12,7 @@ urlpatterns = [
     path("home", views.home, name="home"),
     path("submit-post", views.submit_post, name="submit_post"),
     path("update-post/<int:post_id>/", views.update_post, name="update_post"),
+    path("like-post/<int:postId>/", views.like_post, name="like_post"),
     path("view-profile/<str:username>/", views.view_profile, name="view_profile"),
     path("following-feed", views.following_feed, name="following_feed")
 ]

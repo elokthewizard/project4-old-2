@@ -182,3 +182,17 @@ def view_profile(request, username):
             'posts': posts_dict
         }
     return JsonResponse(data)
+
+@login_required
+def like_post(request, postId):
+    if request.method == 'POST':
+        user = request.user
+        post = get_object_or_404(Post, id=postId)
+        if (user in post.liked_by.all()):
+            post.liked_by.remove(user)
+        else:
+            post.liked_by.add(user)
+
+        return JsonResponse({'status': 'success', 'message': 'Post liked!'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})

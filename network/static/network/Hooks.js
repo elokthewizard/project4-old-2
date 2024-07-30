@@ -1,5 +1,5 @@
 function useFetch(url) {
-    const [data, setdata] = React.useState(null);
+    const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
 
@@ -16,7 +16,7 @@ function useFetch(url) {
             return response.json()
         })
         .then(data => {
-            setdata(data);
+            setData(data);
             setLoading(false);
         })
         .catch(error => {
@@ -24,7 +24,7 @@ function useFetch(url) {
             setLoading(false);
         })
     }, [url])
-    return {data, loading, error}
+    return {setData, data, loading, error}
 }
 
 function useProfileData(currentProfile) {

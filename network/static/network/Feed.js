@@ -1,6 +1,6 @@
 function Feed({ setVisibleComponent, setCurrentProfile, setPostData}) {
     const [currentPage, setCurrentPage] = React.useState(1)
-    const {data, loading, error} = useFetch(`home?page=${currentPage}`);
+    const {setData, data, loading, error} = useFetch(`home?page=${currentPage}`);
     const [currentUser, setCurrentUser] = React.useState(null);
 
     React.useEffect(() => {
@@ -16,6 +16,38 @@ function Feed({ setVisibleComponent, setCurrentProfile, setPostData}) {
         let post = data.find(post => post.id === postId)
         setPostData(post);
         setVisibleComponent('edit_post')
+    }
+
+    function handleLike(postId) {
+        const csrftoken = Cookies.get('csrftoken');
+        fetch(`like-post/${postId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status == 'success') {
+                // Update the state with the new data
+                setData(prevData => prevData.map(post => {
+                    if (post.id === postId) {
+                        const hasLiked = post.liked_by.includes(currentUser)
+                        // Create a new post object with the updated liked_by array
+                        return {
+                            // spread operator makes it ez to use the object
+                            ...post,
+                            liked_by: hasLiked ?
+                            post.liked_by.filter(user => user !== currentUser) : 
+                            [...post.liked_by, currentUser]
+                        };
+                    } else {
+                        return post;
+                    }
+                }));
+            }
+        })
     }
 
     if (loading) {
@@ -42,6 +74,7 @@ function Feed({ setVisibleComponent, setCurrentProfile, setPostData}) {
                 {currentUser === post.author_username && (
                     <button onClick={() => handleEdit(post.id)}>Edit</button>
                 )}
+                <button onClick={() => handleLike(post.id)}>Like</button>
             </div>
             ))}
             <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>Back</button>
