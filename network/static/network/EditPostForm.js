@@ -37,7 +37,7 @@ function EditPostForm({ postData, setVisibleComponent }) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className="post-form" onSubmit={handleSubmit}>
             <textarea name="body" value={formData.body} onChange={handleChange}></textarea>
             <button type="submit" disabled={!formData.body}>Update</button>
         </form>

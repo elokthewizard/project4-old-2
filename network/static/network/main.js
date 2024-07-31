@@ -10,39 +10,55 @@ function App() {
         console.log(postData);
     }, [postData]);
 
+    function formatDate(timestamp) {
+        const date = new Date(timestamp);
+        return date.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+    }
+
     return(
         <div>
             {visibleComponent === null && (
                 <>
                     <Navbar setVisibleComponent={setVisibleComponent} />
                     <NewPostForm setVisibleComponent={setVisibleComponent} setComponentKey={setComponentKey} />
-                    <FollowingFeed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} setCurrentProfile={setCurrentProfile} key={componentKey} />
+                    <FollowingFeed formatDate={formatDate} visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} setCurrentProfile={setCurrentProfile} key={componentKey} />
                 </>
             )}
             {visibleComponent === 'all_posts' && (
                 <>
                     <Navbar setVisibleComponent={setVisibleComponent} />
                     <NewPostForm setVisibleComponent={setVisibleComponent} setComponentKey={setComponentKey} />
-                    <Feed visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} setCurrentProfile={setCurrentProfile} setPostData={setPostData} key={componentKey} />
+                    <Feed formatDate={formatDate} visibleComponent={visibleComponent} setVisibleComponent={setVisibleComponent} setCurrentProfile={setCurrentProfile} setPostData={setPostData} key={componentKey} />
                 </>
             )}
             {visibleComponent === 'profile' && (
                 <>
+                    <Navbar setVisibleComponent={setVisibleComponent} />
                     <Profile currentProfile={currentProfile} setCurrentProfile={setCurrentProfile} setVisibleComponent={setVisibleComponent}/>
                 </>
             )}
             {visibleComponent === 'followers' && (
                 <>
-                    <Followers setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} />
+                    <Navbar setVisibleComponent={setVisibleComponent} />
+                    <Followers setCurrentProfile={setCurrentProfile} setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} />
                 </>
             )}
             {visibleComponent === 'following' && (
                 <>
-                    <Following setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} />
+                    <Navbar setVisibleComponent={setVisibleComponent} />
+                    <Following setCurrentProfile={setCurrentProfile} setVisibleComponent={setVisibleComponent} currentProfile={currentProfile} />
                 </>
             )}
             {visibleComponent === 'edit_post' && (
                 <>
+                    <Navbar setVisibleComponent={setVisibleComponent} />
                     <EditPostForm postData={postData} setVisibleComponent={setVisibleComponent}/>
                 </>
             )}

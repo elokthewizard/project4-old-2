@@ -1,4 +1,4 @@
-function FollowingFeed({setVisibleComponent, setCurrentProfile}) {
+function FollowingFeed({formatDate, setVisibleComponent, setCurrentProfile}) {
     const [currentPage, setCurrentPage] = React.useState(1)
     const {setData, data, loading, error} = useFetch('following-feed');
     const [currentUser, setCurrentUser] = React.useState(null);
@@ -47,17 +47,21 @@ function FollowingFeed({setVisibleComponent, setCurrentProfile}) {
             <h2>Your feed:</h2>
             {data.map(post => (
                 <div className="post" id={`post_${post.id}`} key={post.id}>
-                <a className="profile-link" href={`view-profile/${post.author_username}`} onClick={(e) => {
-                    e.preventDefault();
-                    console.log("SWAG")
-                    console.log(`${post.author_username}`)
-                    setVisibleComponent('profile')
-                    setCurrentProfile(`${post.author_username}`)
-                }}>@{post.author_username}</a>
-                <div>{post.body}</div>
-                <div>{post.time}</div>
-                <div>Likes: {post.liked_by.length}</div>
-                <button onClick={() => handleLike(post.id)}>Like</button>
+                <div class="post-header">
+                    <a className="profile-link" href={`view-profile/${post.author_username}`} onClick={(e) => {
+                        e.preventDefault();
+                        setVisibleComponent('profile')
+                        setCurrentProfile(`${post.author_username}`)
+                    }}>@{post.author_username}</a>
+                </div>
+                <div className="post-main">
+                    <div className="post-body">"{post.body}"</div>
+                    <div className="post-time">{formatDate(post.time)}</div>
+                </div>
+                <div class="post-likes">
+                    <div>Likes: {post.liked_by.length}</div>
+                    <button onClick={() => handleLike(post.id)}>Like</button>
+                </div>
             </div>
             ))}
             <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>Back</button>

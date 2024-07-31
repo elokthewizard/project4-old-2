@@ -9,7 +9,7 @@ function Navbar({setVisibleComponent}) {
     }, []);
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="feednav navbar navbar-expand navbar-light bg-light">
             <div>
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item">

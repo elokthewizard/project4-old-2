@@ -36,7 +36,7 @@ function NewPostForm({ setVisibleComponent }) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className="post-form" onSubmit={handleSubmit}>
             <textarea name="body" placeholder="Whats happening?" onChange={handleChange}></textarea>
             <button type="submit" disabled={!formData.body}>Submit</button>
         </form>

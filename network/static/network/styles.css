@@ -1,0 +1,126 @@
+body {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+}
+
+.feed,
+.profile-main {
+    max-width: 75%;
+    margin: 0 auto;
+}
+
+.feednav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 75%;
+    margin: 0 auto;
+    padding: 0;
+    color: white;
+}
+
+.feednav * {
+    display: flex;
+    width: 100%;
+}
+
+.feednav a {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-color: #6D8EA0;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+}
+
+.post-form {
+    max-width: 75%;
+    margin: 0 auto;
+}
+
+.post-form * {
+    display: flex;
+    width: 100%;
+}
+
+.post {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.post-body {
+    font-weight: 400;
+    font-size: large;
+    width: 100%;
+}
+
+.post-header {
+    background-color: inherit;
+    filter: brightness(0.8);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.post:nth-child(even) .post-header {
+    width: 100%;
+}
+
+.post-time {
+    display: flex;
+    font-size: small;
+    font-style: italic;
+    justify-content: flex-end;
+}
+
+.post-likes {
+    display: flex;
+    flex-direction: row;
+}
+
+.post-likes {
+    justify-content: flex-end;
+    gap: 1.25rem;
+}
+
+.post-main {
+    padding: 2rem;
+}
+
+.post:nth-child(even) {
+    background-color: #016FB9;
+    color: white;
+}
+
+.post:nth-child(odd) {
+    background-color: #182825;
+    color: white;
+}
+
+.profile-link {
+    font-weight: 600;
+    font-style: italic;
+    color: white;
+}
+
+.profile-link:hover {
+    color: lightgray;
+    background-color: none; /* Replace with your desired hover background color */
+    text-decoration: none;
+}
+
+/* .post:nth-child(even) .profile-link {
+    background-color: lightgray brightness(0.8);
+    color: inherit brightness(1.2);
+}
+
+.post:nth-child(odd) .profile-link {
+    background-color: azure;
+    filter: brightness(0.8);
+} */
